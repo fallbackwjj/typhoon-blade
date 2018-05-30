@@ -64,6 +64,7 @@
  parallel_svm/BUILD
 """
 
+from __future__ import print_function
 
 import datetime
 import errno
@@ -192,7 +193,7 @@ def _check_code_style(opened_files):
             else:
                 msg = 'Please fixing style warnings before submitting the code!'
             console.warning(msg)
-    except KeyboardInterrupt, e:
+    except KeyboardInterrupt as e:
         console.error(str(e))
         return 1
     return 0
@@ -289,7 +290,7 @@ def _main(blade_path):
     if blade_root_dir != working_dir:
         # This message is required by vim quickfix mode if pwd is changed during
         # the building, DO NOT change the pattern of this message.
-        print >>sys.stderr, "Blade: Entering directory `%s'" % blade_root_dir
+        print("Blade: Entering directory `%s'" % blade_root_dir, file=sys.stderr)
 
     # Init global configuration manager
     configparse.blade_config = BladeConfig(blade_root_dir)
@@ -375,7 +376,7 @@ def main(blade_path):
         if exit_code == 0:
             console.info('success')
         console.info('cost time is %ss' % datetime.timedelta(seconds=cost_time))
-    except SystemExit, e:
+    except SystemExit as e:
         exit_code = e.code
     except KeyboardInterrupt:
         console.error_exit('keyboard interrupted', -signal.SIGINT)

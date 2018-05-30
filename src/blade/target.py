@@ -18,6 +18,7 @@ import string
 import configparse
 import console
 from blade_util import var_to_list
+from blade_util import regular_variable_name
 
 
 class Target(object):
@@ -218,8 +219,7 @@ class Target(object):
         elif dep.startswith('//'):
             # Depend on library in remote directory
             if not ':' in dep:
-                raise Exception, 'Wrong format in %s:%s' % (
-                        self.path, self.name)
+                raise Exception('Wrong format in %s:%s' % (self.path, self.name))
             (path, lib) = dep[2:].rsplit(':', 1)
             dkey = (os.path.normpath(path), lib)
         elif dep.startswith('#'):
@@ -230,11 +230,10 @@ class Target(object):
         else:
             # Depend on library in relative subdirectory
             if not ':' in dep:
-                raise Exception, 'Wrong format in %s:%s' % (
-                        self.path, self.name)
+                raise Exception('Wrong format in %s:%s' % (self.path, self.name))
             (path, lib) = dep.rsplit(':', 1)
             if '..' in path:
-                raise Exception, "Don't use '..' in path"
+                raise Exception("Don't use '..' in path")
             dkey = (os.path.normpath('%s/%s' % (
                                       self.path, path)), lib)
 
@@ -310,7 +309,7 @@ class Target(object):
         which means this target is visible globally within the code base.
         Note that targets inside the same BUILD file are always visible
         to each other.
-        
+
         """
         if visibility is None:
             return
@@ -336,17 +335,17 @@ class Target(object):
 
     def _get_java_pack_deps(self):
         """_get_java_pack_deps
-        
+
         Returns
         -----------
         A tuple of (scons vars, jars)
-        
+
         Description
         -----------
         Return java package dependencies excluding provided dependencies
         scons vars represent targets to be built later
         jars represent prebuilt jars or maven artifacts within local repository
-        
+
         """
         return [], []
 
@@ -366,7 +365,7 @@ class Target(object):
         Replace the chars that scons doesn't regconize.
 
         """
-        return var.translate(string.maketrans(',-/.+*', '______'))
+        return regular_variable_name(var)
 
     def _generate_variable_name(self, path, name, suffix=''):
         """_generate_variable_name.

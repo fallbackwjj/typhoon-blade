@@ -14,7 +14,10 @@
 
 import os
 import subprocess
-import Queue
+try:
+    from queue import Queue
+except ImportError:
+    from Queue import Queue
 
 import blade
 import configparse
@@ -506,7 +509,7 @@ class CcTarget(Target):
     def _generate_generated_header_files_depends(self, var_name):
         """Generate dependencies to targets that generate header files. """
         env_name = self._env_name()
-        q = Queue.Queue(0)
+        q = Queue(0)
         for key in self.deps:
             q.put(key)
 

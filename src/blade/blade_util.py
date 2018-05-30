@@ -18,6 +18,7 @@ import os
 import re
 import string
 import subprocess
+import sys
 
 import console
 
@@ -58,7 +59,7 @@ def lock_file(fd, flags):
     try:
         fcntl.flock(fd, flags)
         return (True, 0)
-    except IOError, ex_value:
+    except IOError as ex_value:
         return (False, ex_value[0])
 
 
@@ -67,7 +68,7 @@ def unlock_file(fd):
     try:
         fcntl.flock(fd, fcntl.LOCK_UN)
         return (True, 0)
-    except IOError, ex_value:
+    except IOError as ex_value:
         return (False, ex_value[0])
 
 
@@ -129,7 +130,13 @@ def get_cwd():
 
     """
     p = subprocess.Popen(['pwd'], stdout=subprocess.PIPE, shell=True)
-    return p.communicate()[0].strip()
+    return p.communicate()[0].strip().decode('utf-8')
+
+
+def execfile(filename, globals=None, locals=None):
+    with open(filename) as f:
+        code = compile(f.read(), filename, 'exec')
+        exec(code, globals, locals)
 
 
 def environ_add_path(env, key, path):
@@ -165,4 +172,7 @@ def regular_variable_name(var):
     Replace the chars that scons doesn't regconize.
 
     """
-    return var.translate(string.maketrans(',-/.+*', '______'))
+    return var.replace('/', '_').replace('-', '_').replace('.', '_')
+    _TRANS = string.maketrans(b',-/.+*', b'______')
+    return var.translate(_TRANS)
+

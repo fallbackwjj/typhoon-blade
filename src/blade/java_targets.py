@@ -12,7 +12,10 @@ Implement java_library, java_binary, java_test and java_fat_library
 
 import os
 import re
-import Queue
+try:
+    from queue import Queue
+except ImportError:
+    from Queue import Queue
 from distutils.version import LooseVersion
 
 import blade
@@ -185,7 +188,7 @@ class JavaTargetMixIn(object):
         Recursively get exported dependencies and return a tuple of (scons vars, jars)
         """
         dep_jar_vars, dep_jars = [], []
-        q = Queue.Queue(0)
+        q = Queue(0)
         for key in deps:
             q.put(key)
 

@@ -12,7 +12,10 @@
 """
 
 
-import Queue
+try:
+    from queue import Queue
+except ImportError:
+    from Queue import Queue
 import subprocess
 import sys
 import threading
@@ -124,8 +127,8 @@ class TestScheduler(object):
         self.failed_targets_lock = threading.Lock()
         self.num_of_run_tests = 0
         self.num_of_run_tests_lock = threading.Lock()
-        self.job_queue = Queue.Queue(0)
-        self.exclusive_job_queue = Queue.Queue(0)
+        self.job_queue = Queue(0)
+        self.exclusive_job_queue = Queue(0)
 
     def __get_workers_num(self):
         """get the number of thread workers. """
@@ -201,7 +204,7 @@ class TestScheduler(object):
                 returncode = self._run_job_redirect(job, job_thread)
             else:
                 returncode = self._run_job(job, job_thread)
-        except OSError, e:
+        except OSError as e:
             console.error('%s: Create test process error: %s' %
                           (target.fullname, str(e)))
             returncode = 255

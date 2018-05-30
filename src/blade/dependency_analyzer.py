@@ -170,12 +170,11 @@ def _topological_sort(pairlist):
                 successors[first] = [second]
 
     # suck up everything without a predecessor
-    answer = filter(lambda x, numpreds=numpreds: numpreds[x] == 0,
-                    numpreds.keys())
+    answer = [k for k in numpreds if numpreds[k] == 0]
 
     # for everything in answer, knock down the pred count on
     # its successors; note that answer grows *in* the loop
-    for x in answer:
+    for x in list(answer):
         assert numpreds[x] == 0
         del numpreds[x]
         if x in successors:

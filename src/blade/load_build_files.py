@@ -24,6 +24,7 @@ import blade
 import console
 from blade_util import relative_path
 from blade_util import var_to_list
+from blade_util import execfile
 from pathlib import Path
 
 

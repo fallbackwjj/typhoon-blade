@@ -1127,7 +1127,7 @@ class FileType(object):
         # all other arguments are used as file names
         try:
             return open(string, self._mode, self._bufsize)
-        except IOError ,e:
+        except IOError as e:
             message = _("can't open '%s': %s")
             raise ArgumentTypeError(message % (string, e))
 
@@ -1708,7 +1708,7 @@ class ArgumentParser(_AttributeHolder, _ActionsContainer):
                 if not hasattr(namespace, action.dest):
                     if action.default is not SUPPRESS:
                         default = action.default
-                        if isinstance(action.default, basestring):
+                        if isinstance(action.default, str):
                             default = self._get_value(action, default)
                         setattr(namespace, action.dest, default)
 

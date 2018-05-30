@@ -11,6 +11,7 @@
 
 """
 
+from __future__ import print_function
 
 import os
 
@@ -187,27 +188,25 @@ class Blade(object):
                     self.query_dependency_tree(targets)
                 else:
                     for key in result_map:
-                        print '\n'
+                        print('\n')
                         deps = result_map[key][0]
                         console.info('//%s:%s depends on the following targets:' % (
                                 key[0], key[1]))
                         for d in deps:
-                            print '%s:%s' % (d[0], d[1])
+                            print('%s:%s' % (d[0], d[1]))
             if print_depended:
                 for key in result_map:
-                    print '\n'
+                    print('\n')
                     depended_by = result_map[key][1]
                     console.info('//%s:%s is depended by the following targets:' % (
                             key[0], key[1]))
                     for d in depended_by:
-                        print '%s:%s' % (d[0], d[1])
+                        print('%s:%s' % (d[0], d[1]))
         return 0
 
     def print_dot_node(self, output_file, node):
-        print >>output_file, '"%s:%s" [label = "%s:%s"]' % (node[0],
-                                                            node[1],
-                                                            node[0],
-                                                            node[1])
+        print('"%s:%s" [label = "%s:%s"]' % (node[0], node[1], node[0], node[1]),
+              file=output_file)
 
     def print_dot_deps(self, output_file, node, target_set):
         targets = self.__build_targets
@@ -215,10 +214,7 @@ class Blade(object):
         for i in deps:
             if not i in target_set:
                 continue
-            print >>output_file, '"%s:%s" -> "%s:%s"' % (node[0],
-                                                         node[1],
-                                                         i[0],
-                                                         i[1])
+            print('"%s:%s" -> "%s:%s"' % (node[0], node[1], i[0], i[1]), file=output_file)
 
     def output_dot(self, result_map, print_mode, dot_file):
         f = open(dot_file, 'w')
@@ -226,12 +222,12 @@ class Blade(object):
         nodes = set(targets)
         for key in targets:
             nodes |= set(result_map[key][print_mode])
-        print >>f, 'digraph blade {'
+        print('digraph blade {', file=f)
         for i in nodes:
             self.print_dot_node(f, i)
         for i in nodes:
             self.print_dot_deps(f, i, nodes)
-        print >>f, '}'
+        print('}', file=f)
         f.close()
 
     def query_helper(self, targets):

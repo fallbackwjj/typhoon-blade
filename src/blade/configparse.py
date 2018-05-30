@@ -15,6 +15,7 @@ import sys
 
 import console
 from blade_util import var_to_list
+from blade_util import execfile
 from cc_targets import HEAP_CHECK_VALUES
 from proto_library_target import ProtocPlugin
 
@@ -159,7 +160,7 @@ class BladeConfig(object):
         try:
             self.current_file_name = filename
             if os.path.exists(filename):
-                execfile(filename)
+                execfile(filename, globals())
         except SystemExit:
             console.error_exit('Parse error in config file %s, exit...' % filename)
 
@@ -327,7 +328,7 @@ def cc_config(append=None, **kwargs):
     """extra cc config, like extra cpp include path splited by space. """
     if 'extra_incs' in kwargs:
         extra_incs = kwargs['extra_incs']
-        if isinstance(extra_incs, basestring) and ' ' in extra_incs:
+        if isinstance(extra_incs, str) and ' ' in extra_incs:
             console.warning('%s: cc_config: extra_incs has been changed to list' %
                     blade_config.current_file_name)
             kwargs['extra_incs'] = extra_incs.split()

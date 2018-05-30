@@ -13,6 +13,7 @@
 
 """
 
+from __future__ import print_function
 
 import os
 import sys
@@ -93,7 +94,7 @@ def error(msg):
     log(msg)
     if color_enabled:
         msg = _colors['red'] + msg + _colors['end']
-    print >>sys.stderr, msg
+    print(msg, file=sys.stderr)
 
 
 def error_exit(msg, code=1):
@@ -108,7 +109,7 @@ def warning(msg):
     log(msg)
     if color_enabled:
         msg = _colors['yellow'] + msg + _colors['end']
-    print >>sys.stderr, msg
+    print(msg, file=sys.stderr)
 
 
 def info(msg, prefix=True):
@@ -118,7 +119,7 @@ def info(msg, prefix=True):
     log(msg)
     if color_enabled:
         msg = _colors['cyan'] + msg + _colors['end']
-    print >>sys.stderr, msg
+    print(msg, file=sys.stderr)
 
 
 def debug(msg):
@@ -129,4 +130,4 @@ def debug(msg):
 def log(msg):
     """Dump message into log file. """
     if _log:
-        print >>_log, msg
+        print(msg, file=_log)
